@@ -1,1 +1,1 @@
-# graphql-server-skeleton
+To start dev server run command: npm start
