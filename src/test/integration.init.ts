@@ -1,3 +1,29 @@
-import * as chai from 'chai';
+import * as glob from 'glob';
+import * as path from 'path';
+import { initApplication } from './graphql-request';
 
-chai.use(require('chai-http'));
+const beforeEachHandlers: Function[] = [];
+
+before(() => {
+    return Promise.all([
+        initApplication(),
+        new Promise((resolve, reject) => {
+            glob(path.resolve(__dirname, '../modules/**/test/integration/before.js'), (err, files) => {
+                if (err) reject(err);
+
+                files.forEach(file => {
+                    const handler = require(file).before;
+                    if (typeof handler === 'function') {
+                        beforeEachHandlers.push(handler);
+                    }
+                });
+
+                resolve();
+            });
+        })
+    ]);
+});
+
+beforeEach(() => {
+    beforeEachHandlers.forEach(handler => handler());
+});

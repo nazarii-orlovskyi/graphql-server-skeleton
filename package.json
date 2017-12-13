@@ -4,11 +4,14 @@
   "main": "server.js",
   "scripts": {
     "start": "rm -rf dist/* && tsc -w & ENV=dev nodemon server.js",
+    "compile": "rm -rf dist/* && tsc",
     "build": "echo 'Not implemented' && exit 1",
-    "test:unit": "ENV=unit-test mocha -r ts-node/register -r src/test/unit.init.ts src/**/unit/**/*.test.ts",
+
+    "test:unit": "npm run compile && ENV=unit-test mocha --reporter dot -r dist/test/unit.init.js dist/**/unit/**/*.test.js",
     "test:unit:coverage": "ENV=unit-test nyc npm run test:unit",
     "test:coverage-html-report": "xdg-open coverage/index.html",
-    "test:integration": "ENV=integration-test mocha -r ts-node/register -r src/test/integration.init.ts src/**/integration/**/*.test.ts",
+
+    "test:integration": "npm run compile && ENV=integration-test mocha --reporter dot dist/test/integration.init.js dist/**/integration/**/*.test.js",
     "test": "npm run test:unit && npm run test:integration"
   },
   "dependencies": {
@@ -25,7 +28,6 @@
   "devDependencies": {
     "@types/async": "^2.0.45",
     "@types/chai": "^4.0.5",
-    "@types/chai-http": "^3.0.3",
     "@types/express": "^4.0.39",
     "@types/glob": "^5.0.33",
     "@types/graphql": "^0.11.6",
@@ -33,12 +35,13 @@
     "@types/mocha": "^2.2.44",
     "@types/morgan": "^1.7.35",
     "@types/sinon": "^4.0.0",
+    "@types/supertest": "^2.0.4",
     "chai": "^4.1.2",
-    "chai-http": "^3.0.0",
     "mocha": "^4.0.1",
     "nodemon": "^1.12.1",
     "nyc": "^11.3.0",
     "sinon": "^4.1.2",
+    "supertest": "^3.0.0",
     "ts-loader": "^3.1.1",
     "ts-node": "^3.3.0",
     "typescript": "^2.6.1"
