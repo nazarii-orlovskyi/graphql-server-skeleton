@@ -53,21 +53,16 @@
     "typescript": "^2.6.1"
   },
   "nyc": {
-    "includes": [
-      "src/**/*.ts"
-    ],
     "exclude": [
-      "src/**/*.test.ts"
+      "**/*.test.js"
     ],
     "extension": [
       ".ts"
     ],
-    "require": [
-      "ts-node/register"
-    ],
     "reporter": [
       "lcov",
-      "html"
+      "html",
+      "text-summary"
     ]
   }
 }
