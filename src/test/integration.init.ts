@@ -7,23 +7,25 @@ const beforeEachHandlers: Function[] = [];
 before(() => {
     return Promise.all([
         initApplication(),
-        new Promise((resolve, reject) => {
-            glob(path.resolve(__dirname, '../modules/**/test/integration/before.js'), (err, files) => {
-                if (err) reject(err);
-
-                files.forEach(file => {
-                    const handler = require(file).before;
-                    if (typeof handler === 'function') {
-                        beforeEachHandlers.push(handler);
-                    }
-                });
-
-                resolve();
-            });
-        })
+        initBeforeHandlers()
     ]);
 });
 
 beforeEach(() => {
     beforeEachHandlers.forEach(handler => handler());
 });
+
+function initBeforeHandlers(): Promise<undefined> {
+    return new Promise((resolve, reject) => {
+        glob(path.resolve(__dirname, '../modules/**/test/integration/before.js'), (err, files) => {
+            if (err) reject(err);
+            files.forEach(file => {
+                const handler = require(file).before;
+                if (typeof handler === 'function') {
+                    beforeEachHandlers.push(handler);
+                }
+            });
+            resolve();
+        });
+    });
+}

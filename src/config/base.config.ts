@@ -6,9 +6,11 @@ export default {
     },
 
     graphql: {
-        apiVerion: 2,
+        enabledApiVerions: [
+            1, 2
+        ],
         schema: {
-            moduleSchemaGlob: '../modules/**/graphql/v*/schema.js',
+            moduleSchemaGlob: '../modules/**/graphql/v:version/schema.js',
         }
     },
 };

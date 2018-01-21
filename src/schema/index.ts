@@ -9,54 +9,57 @@ interface SchemaDefinitionInterface {
     resolver: object;
 }
 
-function collectModulesSchemaFiles(files: string[], apiVersion: number): string[] {
-    const map: { [key: string]: { file: string, version: number } } = {};
+function collectModulesSchemaFiles(files: string[]): string[] {
+    const map: { [key: string]: string} = {};
 
     for (const file of files) {
-        const matches = file.match(/.*\/(\w+)\/graphql\/v([0-9]+)\/schema\.(t|j)s$/)
+        const matches = file.match(/.*\/(\w+)\/graphql\/v[0-9]+\/schema\.(t|j)s$/)
         if (matches) {
-            const [, moduleName, version] = matches;
-            const currentVersion = parseInt(version);
-
-            if (typeof map[moduleName] === 'undefined'
-                || (apiVersion >= currentVersion 
-                    && map[moduleName].version < currentVersion
-                )
-            ) {
-                map[moduleName] = { file, version: currentVersion }
-            }
+            const [, moduleName] = matches;
+            map[moduleName] = file;
         } else {
             throw new Error('File not matched to schema pattern: ' + file);
         }
     }
 
     const result = [];
-    for(const { file } of Object.values(map)) {
+    for(const file of Object.values(map)) {
         result.push(file);
     }
 
     return result;
 }
 
-export function loadSchema(): Promise<GraphQLSchema> {
+export function loadSchema(): Promise<{ [key: string]: GraphQLSchema }> {
     return new Promise((resolve, reject) => {
-        const filesGlob = path.resolve(__dirname, config.graphql.schema.moduleSchemaGlob)
-        glob(filesGlob, function (err, files) {       
-            if (err) {
-                reject(err);
-            }
+        const schemaByVersions: { [key: string]: GraphQLSchema } = {};
+        const lastVersion = config.graphql.enabledApiVerions[config.graphql.enabledApiVerions.length - 1];
+        config.graphql.enabledApiVerions.forEach((version) => {
+            const filesGlob = path
+                .resolve(__dirname, config.graphql.schema.moduleSchemaGlob)
+                .replace(':version', version.toString());
 
-            files = collectModulesSchemaFiles(files, config.graphql.apiVerion);
+            glob(filesGlob, function (err, files) {       
+                if (err) {
+                    reject(err);
+                }
 
-            const modules: SchemaDefinitionInterface[] = [];
-            for (const file of files) {
-                modules.push(require(file));
-            }
+                files = collectModulesSchemaFiles(files);
 
-            const typeDefs = modules.map((m) => m.typeDefs);
-            const resolvers: any = modules.map((m) => m.resolver).filter((res) => !!res);
+                const modules: SchemaDefinitionInterface[] = [];
+                for (const file of files) {
+                    modules.push(require(file));
+                }
 
-            resolve(makeExecutableSchema({ typeDefs, resolvers }))
+                const typeDefs = modules.map((m) => m.typeDefs);
+                const resolvers: any[] = modules.map((m) => m.resolver).filter((res) => !!res);
+
+                schemaByVersions['v' + version] = makeExecutableSchema({ typeDefs, resolvers });
+
+                if (version === lastVersion) {
+                    resolve(schemaByVersions);
+                }
+            }); 
         });
     })
 };

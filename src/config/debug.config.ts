@@ -6,7 +6,7 @@ const debugConfig: typeof devConfig = merge(
     {
         graphql: {
             schema: {
-                moduleSchemaGlob: '../modules/**/graphql/v*/schema.ts'
+                moduleSchemaGlob: '../modules/**/graphql/v:version/schema.ts'
             }
         },
         
