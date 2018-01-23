@@ -5,7 +5,7 @@ import createApp from '../app';
 let app: Application | null = null;
 
 export async function initApplication(): Promise<void> {
-    app = await createApp();
+    app = (await createApp()).app;
 }
 
 export async function makeGraphQlRequest(

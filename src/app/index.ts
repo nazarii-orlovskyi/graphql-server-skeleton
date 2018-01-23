@@ -6,9 +6,14 @@ import * as rotatingFileStream from 'rotating-file-stream';
 import { each } from 'lodash';
 
 import config from '../config';
-import { loadSchema } from '../schema';
+import { loadSchema, SchemaByVersionsInterface } from '../schema';
 
-async function createApp(): Promise<express.Application> {
+interface CreateAppResult {
+    app: express.Application,
+    schemaByVersion: SchemaByVersionsInterface
+}
+
+async function createApp(): Promise<CreateAppResult> {
     const app = express();
     
     // Access log
@@ -23,13 +28,20 @@ async function createApp(): Promise<express.Application> {
 
     // GraphQL
     each(schemaByVersion, (schema, version) => {
-        app.use('/graphql/' + version, bodyParser.json(), graphqlExpress({ schema }));
-        app.use('/graphiql/' + version, graphiqlExpress({ endpointURL: '/graphql/' + version }));
+        const apiRoute = `/graphql/v${version}`;
+
+        app.use(apiRoute, bodyParser.json(), graphqlExpress({ schema }));
+        app.use(`/graphiql/v${version}`, graphiqlExpress({ 
+            endpointURL: apiRoute,
+            subscriptionsEndpoint: `ws://localhost:${config.server.socketPortBase + parseInt(version)}${apiRoute}/subscriptions`,
+        }));
         console.log(`Version ${version} initialized`);
     })
 
-    return app;
+    return {
+        app,
+        schemaByVersion: schemaByVersion
+    };
 };
 
-//for integration tests
 export default createApp;

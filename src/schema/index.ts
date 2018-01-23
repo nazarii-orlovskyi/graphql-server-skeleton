@@ -2,7 +2,9 @@ import * as path from 'path';
 import * as glob from 'glob';
 import config from '../config';
 import { GraphQLSchema } from 'graphql';
-import { makeExecutableSchema } from 'graphql-schema-tools';
+import { merge } from 'lodash';
+import { mergeStrings } from 'gql-merge';
+import { makeExecutableSchema } from 'graphql-tools';
 
 interface SchemaDefinitionInterface {
     typeDefs: string;
@@ -30,7 +32,11 @@ function collectModulesSchemaFiles(files: string[]): string[] {
     return result;
 }
 
-export function loadSchema(): Promise<{ [key: string]: GraphQLSchema }> {
+export interface SchemaByVersionsInterface {
+    [version: string]: GraphQLSchema
+}
+
+export function loadSchema(): Promise<SchemaByVersionsInterface> {
     return new Promise((resolve, reject) => {
         const schemaByVersions: { [key: string]: GraphQLSchema } = {};
         const lastVersion = config.graphql.enabledApiVerions[config.graphql.enabledApiVerions.length - 1];
@@ -51,10 +57,10 @@ export function loadSchema(): Promise<{ [key: string]: GraphQLSchema }> {
                     modules.push(require(file));
                 }
 
-                const typeDefs = modules.map((m) => m.typeDefs);
-                const resolvers: any[] = modules.map((m) => m.resolver).filter((res) => !!res);
+                const typeDefs = mergeStrings(modules.map((m) => m.typeDefs));
+                const resolvers = merge({}, ...modules.map((m) => m.resolver).filter((res) => !!res));
 
-                schemaByVersions['v' + version] = makeExecutableSchema({ typeDefs, resolvers });
+                schemaByVersions[version] = makeExecutableSchema({ typeDefs, resolvers });
 
                 if (version === lastVersion) {
                     resolve(schemaByVersions);

@@ -3,6 +3,7 @@ export default {
 
     server: {
         port: process.env.PORT || 8080,
+        socketPortBase: 3000,
     },
 
     graphql: {
