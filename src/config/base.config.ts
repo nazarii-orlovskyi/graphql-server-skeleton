@@ -1,5 +1,7 @@
+import * as path from 'path';
+
 export default {
-    accessLogDirectory: '/tmp/access-log/',
+    accessLogDirectory: path.resolve(__dirname, '../../var/log/'),
 
     server: {
         port: process.env.PORT || 8080,

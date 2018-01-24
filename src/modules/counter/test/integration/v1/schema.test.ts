@@ -23,6 +23,16 @@ describe('Counter', () => {
                 setValue: 136
             }
         );
+
+        await requestV1.expectRequest(`
+            {
+                current
+            }
+            `,
+            {
+                current: 136
+            }
+        );
     })
 
     it('Mutation.increment increment counter by 1', async () => {
