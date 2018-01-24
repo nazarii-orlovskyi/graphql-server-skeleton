@@ -7,14 +7,17 @@ import { each } from 'lodash';
 import { createServer } from 'http';
 import { SubscriptionServer } from "subscriptions-transport-ws";
 import { execute, subscribe } from "graphql";
+import { ModuleCollector } from '../module/collector';
 
 import config from '../config';
 import { loadSchema, SchemaByVersionsInterface } from '../schema';
+import ModuleInterface from '../module/interface';
 
 export class GraphQlApplication {
     protected _schemaByVersion: SchemaByVersionsInterface | undefined;
     protected _app: express.Application;
     protected _config: typeof config;
+    protected _modules: ModuleInterface[];
 
     get schema(): SchemaByVersionsInterface {
         if (!this._schemaByVersion) {
@@ -40,7 +43,16 @@ export class GraphQlApplication {
         this._config = config;
     }
 
+    protected async _loadModules() {
+        const collector = new ModuleCollector({
+            modulesPath: this._config.modulesPath
+        });
+        this._modules = await collector.getModules();
+    }
+
     public async init(): Promise<void> {
+        await this._loadModules();
+
         this._app = express();
 
         if (this._config.accessLog.enabled) {
@@ -51,7 +63,11 @@ export class GraphQlApplication {
             this._app.use(mogran('tiny', { stream: accessLogStream }));
         }
 
-        this._schemaByVersion = await loadSchema();
+        for (const module of this._modules) {
+            await module.init(this._app);
+        }
+
+        this._schemaByVersion = await loadSchema(this._modules);
 
         each(this._schemaByVersion, (schema, version) => {
             const apiRoute = `/graphql/v${version}`;
@@ -67,6 +83,12 @@ export class GraphQlApplication {
 
             console.log(`Version ${version} initialized`);
         })
+    }
+
+    public async destroy() {
+        for (const module of this._modules) {
+            await module.destroy(this._app);
+        }
     }
 
     public async listen(): Promise<void> {

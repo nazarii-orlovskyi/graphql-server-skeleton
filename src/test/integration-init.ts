@@ -1,18 +1,22 @@
 import * as glob from 'glob';
 import * as path from 'path';
-import { initApplication } from './graphql-request';
+import { app } from './graphql-request';
 
 const beforeEachHandlers: Function[] = [];
 
 before(() => {
     return Promise.all([
-        initApplication(),
+        app.init(),
         initBeforeHandlers()
     ]);
 });
 
 beforeEach(() => {
     beforeEachHandlers.forEach(handler => handler());
+});
+
+after(async () => {
+    await app.destroy();
 });
 
 function initBeforeHandlers(): Promise<undefined> {

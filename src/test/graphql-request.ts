@@ -1,11 +1,7 @@
 import * as request from 'supertest';
 import { GraphQlApplication } from '../app';
 
-const app = GraphQlApplication.createApp();
-
-export async function initApplication(): Promise<void> {
-    await app.init()
-}
+export const app = GraphQlApplication.createApp();
 
 export async function makeGraphQlRequest(
     apiVersion: number,

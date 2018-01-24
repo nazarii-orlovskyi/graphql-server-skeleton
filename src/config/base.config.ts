@@ -6,6 +6,8 @@ export default {
         enabled: true,
     },
 
+    modulesPath: path.resolve(__dirname, '../modules'),
+
     server: {
         port: process.env.PORT || 8080,
         socketPortBase: 3000,
@@ -15,9 +17,6 @@ export default {
         enabledApiVerions: [
             1, 2
         ],
-        schema: {
-            moduleSchemaGlob: '../modules/**/graphql/v:version/schema.js',
-        }
     },
 
     graphiql: {

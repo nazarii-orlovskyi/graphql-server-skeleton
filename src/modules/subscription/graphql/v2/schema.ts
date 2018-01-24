@@ -1,4 +1,5 @@
 import { PubSub } from 'graphql-subscriptions';
+import { quickTimer } from '../../lib/quick-timer';
 
 export const typeDefs = `
     type Subscription {
@@ -7,9 +8,9 @@ export const typeDefs = `
 `;
 
 const pubsub = new PubSub();
-setInterval(() =>  {
+quickTimer.listener = () =>  {
     pubsub.publish('time2', { time: new Date().toISOString() });
-}, 100);
+};
 
 export const resolver = {
     Subscription: {
