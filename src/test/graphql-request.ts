@@ -1,11 +1,10 @@
-import { Application } from 'express';
 import * as request from 'supertest';
-import createApp from '../app';
+import { GraphQlApplication } from '../app';
 
-let app: Application | null = null;
+const app = GraphQlApplication.createApp();
 
 export async function initApplication(): Promise<void> {
-    app = (await createApp()).app;
+    await app.init()
 }
 
 export async function makeGraphQlRequest(
@@ -14,7 +13,7 @@ export async function makeGraphQlRequest(
     variables: object | undefined = undefined
 ): Promise<any> {
     return new Promise((resolve, reject) => {
-        request(app)
+        request(app.expressApp)
             .post('/graphql/v' + apiVersion)
             .send({ query, variables })
             .end((err, res) => {

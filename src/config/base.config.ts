@@ -1,7 +1,10 @@
 import * as path from 'path';
 
 export default {
-    accessLogDirectory: path.resolve(__dirname, '../../var/log/'),
+    accessLog: {
+        directory: path.resolve(__dirname, '../../var/log/'),
+        enabled: true,
+    },
 
     server: {
         port: process.env.PORT || 8080,
@@ -16,4 +19,8 @@ export default {
             moduleSchemaGlob: '../modules/**/graphql/v:version/schema.js',
         }
     },
+
+    graphiql: {
+        enabled: false,
+    }
 };
