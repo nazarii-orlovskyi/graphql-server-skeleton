@@ -8,7 +8,7 @@ export class SlowTimer {
             if (this.listener) {
                 this.listener.apply({});
             }
-        }, 1000);
+        }, this._tickInterval);
     }
 
     stop() {
