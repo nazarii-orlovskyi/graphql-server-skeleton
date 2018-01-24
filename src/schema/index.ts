@@ -63,6 +63,7 @@ export function loadSchema(): Promise<SchemaByVersionsInterface> {
                 schemaByVersions[version] = makeExecutableSchema({ typeDefs, resolvers });
 
                 if (version === lastVersion) {
+                    // we processed all previous items
                     resolve(schemaByVersions);
                 }
             }); 

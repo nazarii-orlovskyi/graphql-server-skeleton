@@ -11,7 +11,7 @@ export async function initApplication(): Promise<void> {
 export async function makeGraphQlRequest(
     apiVersion: number,
     query: string, 
-    variables: object | null = null
+    variables: object | undefined = undefined
 ): Promise<any> {
     return new Promise((resolve, reject) => {
         request(app)

@@ -1,6 +1,5 @@
 node_modules/
 dist/
-src/modules/
 src/config/local.config.ts
 coverage/
 .nyc_output/
