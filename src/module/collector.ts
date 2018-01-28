@@ -39,7 +39,7 @@ export class ModuleCollector {
             } catch (err) {
                 if (err.code === 'MODULE_NOT_FOUND') {
                     modules.push(new ModuleDefault(
-                        path.resolve(this._options.modulesPath, moduleName)
+                        path.resolve(this._options.modulesPath, moduleName),
                     ));
                 } else {
                     throw err;
