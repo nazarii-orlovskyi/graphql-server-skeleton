@@ -59,4 +59,38 @@ describe('Counter', () => {
             { current: 2 }
         );
     });
+
+    it('Mutation.decrement decrement value by one', async () => {
+        requestV1.makeRequest('mutation { setValue(value: 2) }');
+        
+        await requestV1.expectRequest(`
+            mutation {
+                decrement
+            }
+            `,
+            {
+                decrement: 1
+            }
+        );
+
+        await requestV1.expectRequest(`
+            mutation {
+                decrement
+            }
+            `,
+            {
+                decrement: 0
+            }
+        );
+
+        await requestV1.expectRequest(`
+            mutation {
+                decrement
+            }
+            `,
+            {
+                decrement: 0
+            }
+        );
+    });
 });

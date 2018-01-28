@@ -13,11 +13,17 @@ export class GraphQlRequestHelper {
     }
 
     async expectRequest(query: string, expected: object): Promise<void> {
-        expect((await this.makeRequest(query)).data).to.deep.eq(expected);
+        await this.expectRequestWithVars(query, {}, expected);
     }
 
     async expectRequestWithVars(query: string, variables: object, expected: object): Promise<void> {
-        expect((await this.makeRequest(query, variables)).data).to.deep.eq(expected);
+        const response = await this.makeRequest(query, variables);
+
+        if (response.errors) {
+            throw new Error('GraphQL error received: ' + response.errors[0].message);
+        }
+
+        expect(response.data).to.deep.eq(expected);
     }
 }
 

@@ -7,6 +7,7 @@ export const typeDefs = `
 
     type Mutation {
         increment: Int
+        decrement: Int
 
         #Сетить значення каунтера до переданого в параметрі value
         setValue(value: Int!): Int @deprecated
@@ -25,6 +26,9 @@ export const resolver = {
     Mutation: {
         increment() {
             return counter.incValue();
+        },
+        decrement() {
+            return counter.decValue();
         },
         setValue(_context: any, { value }: { value: number }): number {
             counter.setValue(value);

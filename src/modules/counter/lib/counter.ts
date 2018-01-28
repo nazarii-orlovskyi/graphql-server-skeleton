@@ -14,4 +14,12 @@ export default class Counter {
 
         return this._counter
     }
+
+    decValue(): number {
+        if (this._counter) {
+            this._counter--;
+        }
+
+        return this._counter
+    }
 };
