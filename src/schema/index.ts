@@ -6,7 +6,7 @@ import { makeExecutableSchema } from 'graphql-tools';
 import ModuleInterface from '../module/interface';
 
 export interface SchemaByVersionsInterface {
-    [version: string]: GraphQLSchema
+    [version: string]: GraphQLSchema;
 }
 
 export async function loadSchema(modules: ModuleInterface[]): Promise<SchemaByVersionsInterface> {
@@ -30,4 +30,4 @@ export async function loadSchema(modules: ModuleInterface[]): Promise<SchemaByVe
     }
 
     return schemaByVersions;
-};
+}

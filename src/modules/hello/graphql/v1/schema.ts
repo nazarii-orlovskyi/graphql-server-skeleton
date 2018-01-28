@@ -8,6 +8,6 @@ export const resolver = {
     Query: {
         hello() {
             return 'World!!!';
-        }
-    }
-}
+        },
+    },
+};

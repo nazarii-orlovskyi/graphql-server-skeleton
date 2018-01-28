@@ -15,11 +15,11 @@ export default {
 
     graphql: {
         enabledApiVerions: [
-            1, 2
+            1, 2,
         ],
     },
 
     graphiql: {
         enabled: false,
-    }
+    },
 };

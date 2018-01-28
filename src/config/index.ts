@@ -5,7 +5,7 @@ import { merge } from 'lodash';
 const config: typeof baseConfig = merge(
     baseConfig,
     require('./' + (process.env.ENV || 'dev') + '.config').default,
-    localConfig
+    localConfig,
 );
 
 export default config;

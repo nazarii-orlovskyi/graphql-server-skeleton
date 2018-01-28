@@ -4,11 +4,14 @@ export class SlowTimer {
     protected _tickInterval = 2000;
 
     start() {
-        this._timerId = setInterval(() => {
-            if (this.listener) {
-                this.listener.apply({});
-            }
-        }, this._tickInterval);
+        this._timerId = setInterval(
+            () => {
+                if (this.listener) {
+                    this.listener.apply({});
+                }
+            },
+            this._tickInterval,
+        );
     }
 
     stop() {

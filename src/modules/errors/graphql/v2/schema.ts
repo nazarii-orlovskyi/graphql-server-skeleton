@@ -9,5 +9,5 @@ export const resolver = {
         native() {
             throw new Error('This is native error');
         },
-    }
+    },
 };

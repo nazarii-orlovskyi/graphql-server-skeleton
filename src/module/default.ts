@@ -1,4 +1,4 @@
-import ModuleAbstract from "./abstract";
+import ModuleAbstract from './abstract';
 
 export default class ModuleDefault extends ModuleAbstract {
     constructor(modulePath: string) {

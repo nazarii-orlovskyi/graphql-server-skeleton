@@ -6,7 +6,7 @@ export const app = GraphQlApplication.createApp();
 export async function makeGraphQlRequest(
     apiVersion: number,
     query: string, 
-    variables: object | undefined = undefined
+    variables: object | undefined = undefined,
 ): Promise<any> {
     return new Promise((resolve, reject) => {
         request(app.expressApp)
@@ -18,4 +18,4 @@ export async function makeGraphQlRequest(
                 resolve(res.body);
             });
     });
-};
+}

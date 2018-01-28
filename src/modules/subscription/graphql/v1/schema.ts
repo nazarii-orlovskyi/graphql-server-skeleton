@@ -10,14 +10,14 @@ export const typeDefs = `
 const pubsub = new PubSub();
 slowTimer.listener = () => {
     pubsub.publish('time', { time: new Date().toISOString() });
-}
+};
 
 export const resolver = {
     Subscription: {
         time: {
             subscribe() {
-                return pubsub.asyncIterator('time')
-            }
-        }
-    }
-}
+                return pubsub.asyncIterator('time');
+            },
+        },
+    },
+};

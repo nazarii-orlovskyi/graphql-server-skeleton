@@ -20,7 +20,7 @@ export const resolver = {
     Query: {
         current() {
             return counter.getValue();
-        }
+        },
     },
 
     Mutation: {
@@ -35,5 +35,5 @@ export const resolver = {
 
             return value;
         },
-    }
-}
+    },
+};

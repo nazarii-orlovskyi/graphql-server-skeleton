@@ -1,4 +1,4 @@
-import ModuleAbstract from "../../module/abstract";
+import ModuleAbstract from '../../module/abstract';
 import { slowTimer } from './lib/slow-timer';
 import { quickTimer } from './lib/quick-timer';
 

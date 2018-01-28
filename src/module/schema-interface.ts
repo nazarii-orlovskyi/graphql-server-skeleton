@@ -1,4 +1,4 @@
 export default interface ModuleSchemaInterface {
-    typeDefs: string,
-    resolver: object,
+    typeDefs: string;
+    resolver: object;
 }

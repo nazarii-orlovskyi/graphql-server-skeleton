@@ -12,7 +12,7 @@ export default class Counter {
     setValue(value: number) {
         this._counter = value;
 
-        return this._counter
+        return this._counter;
     }
 
     decValue(): number {
@@ -20,6 +20,7 @@ export default class Counter {
             this._counter--;
         }
 
-        return this._counter
+        return this._counter;
     }
-};
+}
+

@@ -7,7 +7,7 @@ const beforeEachHandlers: Function[] = [];
 before(() => {
     return Promise.all([
         app.init(),
-        initBeforeHandlers()
+        initBeforeHandlers(),
     ]);
 });
 
@@ -23,7 +23,7 @@ function initBeforeHandlers(): Promise<undefined> {
     return new Promise((resolve, reject) => {
         glob(path.resolve(__dirname, '../modules/**/test/integration/before.js'), (err, files) => {
             if (err) reject(err);
-            files.forEach(file => {
+            files.forEach((file) => {
                 const handler = require(file).before;
                 if (typeof handler === 'function') {
                     beforeEachHandlers.push(handler);

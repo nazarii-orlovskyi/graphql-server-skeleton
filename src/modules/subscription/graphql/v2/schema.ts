@@ -16,8 +16,8 @@ export const resolver = {
     Subscription: {
         time: {
             subscribe() {
-                return pubsub.asyncIterator('time2')
-            }
-        }
-    }
-}
+                return pubsub.asyncIterator('time2');
+            },
+        },
+    },
+};

@@ -1,6 +1,6 @@
 import * as path from 'path';
 import * as fs from 'fs';
-import ModuleInterface from "./interface";
+import ModuleInterface from './interface';
 import ModuleDefault from './default';
 
 export interface ModuleCollectorOptions {
@@ -19,7 +19,7 @@ export class ModuleCollector {
 
         const getModuleFilePath = (moduleName: string) => {
             return path.resolve(this._options.modulesPath, moduleName, 'module');
-        }
+        };
 
         const readDir = (modulesPath: string): Promise<string[]> => {
             return new Promise((resolve, reject) => {
@@ -27,9 +27,9 @@ export class ModuleCollector {
                     if (err) reject(err);
     
                     resolve(files);
-                })
+                });
             });
-        }
+        };
         
         const moduleNames = await readDir(this._options.modulesPath);
         for (const moduleName of moduleNames) {
@@ -38,7 +38,9 @@ export class ModuleCollector {
                 modules.push(new moduleConstructor);
             } catch (err) {
                 if (err.code === 'MODULE_NOT_FOUND') {
-                    modules.push(new ModuleDefault(path.resolve(this._options.modulesPath, moduleName)))
+                    modules.push(new ModuleDefault(
+                        path.resolve(this._options.modulesPath, moduleName)
+                    ));
                 } else {
                     throw err;
                 }
