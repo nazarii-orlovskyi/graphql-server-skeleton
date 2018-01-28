@@ -16,7 +16,8 @@
     "test:integration:coverage": "ENV=integration-test nyc npm run test:integration",
     "test:integration:html": "npm run test:integration:coverage && xdg-open coverage/index.html",
     "test": "npm run test:unit && npm run test:integration",
-    "precommit": "npm test"
+    "precommit": "npm run test:unit",
+    "prepush": "npm test"
   },
   "dependencies": {
     "apollo-server-express": "^1.2.0",
