@@ -30,7 +30,7 @@ describe('Counter', () => {
             }
             `,
             {
-                current: 137
+                current: 136
             }
         );
     })
