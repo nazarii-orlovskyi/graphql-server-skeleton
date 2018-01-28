@@ -1,3 +1,4 @@
+import 'source-map-support/register';
 import * as express from 'express';
 import * as bodyParser from 'body-parser';
 import { graphqlExpress, graphiqlExpress } from 'apollo-server-express';
